@@ -1,0 +1,6 @@
+DELIMITER
+CREATE PROCEDURE GetUserById(IN user_id INT)
+BEGIN
+    SELECT * FROM Users WHERE id = user_id;
+END
+DELIMITER;
