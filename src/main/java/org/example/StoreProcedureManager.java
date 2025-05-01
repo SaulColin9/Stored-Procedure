@@ -12,13 +12,6 @@ public class StoreProcedureManager {
         this.connection = connection;
     }
 
-    public void dropAllProcedures() throws SQLException {
-        try (CallableStatement stmt = connection.prepareCall("{CALL DropAllProcedures()}")) {
-            stmt.execute();
-            logger.info("All stored procedures dropped successfully.");
-        }
-    }
-
     public void createAddUserProcedure() throws SQLException {
         String sql = """
                 CREATE PROCEDURE AddUser(IN name VARCHAR(255), IN email VARCHAR(255))
@@ -32,6 +25,19 @@ public class StoreProcedureManager {
         }
     }
 
+    public void createAddPostProcedure() throws SQLException{
+        String sql = """
+                CREATE PROCEDURE AddPost(IN user_id INT, IN content TEXT)
+                BEGIN
+                    INSERT INTO Posts(user_id, content) VALUES (user_id, content);
+                END
+                """;
+        try(Statement statement = connection.createStatement()){
+            statement.execute(sql);
+            logger.info("Stored procedure AddPost created successfully.");
+        }
+    }
+
     public void invokeAddUserProcedure(String name, String email) throws SQLException {
         try (CallableStatement stmt = connection.prepareCall("{CALL AddUser(?, ?)}")) {
             stmt.setString(1, name);
@@ -41,7 +47,8 @@ public class StoreProcedureManager {
         }
     }
 
-    public void invokePrintProceduresProcedure(String dbName) throws SQLException{
+    public void invokePrintProceduresProcedure() throws SQLException{
+        String dbName = connection.getCatalog();
         try (CallableStatement stmt = connection.prepareCall("{CALL PrintProcedures(?)}")) {
             stmt.setString(1, dbName);
             boolean notEmpty = stmt.execute();
