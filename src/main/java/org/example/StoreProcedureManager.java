@@ -40,4 +40,12 @@ public class StoreProcedureManager {
             logger.info("User added successfully using AddUser procedure: {}", name);
         }
     }
+
+    public void dropProcedure(String procedure) throws SQLException {
+        try (CallableStatement stmt = connection.prepareCall("{CALL DropProcedure(?)}")) {
+            stmt.setString(1, procedure);
+            stmt.execute();
+            logger.info("Procedure {} dropped successfully.", procedure);
+        }
+    }
 }
