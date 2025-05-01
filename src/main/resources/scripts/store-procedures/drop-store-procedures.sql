@@ -1,6 +1,1 @@
-DELIMITER //
-CREATE PROCEDURE DropProcedure(IN procedureName VARCHAR(255))
-BEGIN
-    DROP PROCEDURE procedureName;
-END //
-DELIMITER ;
+DROP PROCEDURE procedureName;

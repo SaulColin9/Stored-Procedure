@@ -41,11 +41,17 @@ public class StoreProcedureManager {
         }
     }
 
-    public void dropProcedure(String procedure) throws SQLException {
-        try (CallableStatement stmt = connection.prepareCall("{CALL DropProcedure(?)}")) {
-            stmt.setString(1, procedure);
+    public void invokePrintProceduresProcedure(String dbName) throws SQLException{
+        try (CallableStatement stmt = connection.prepareCall("{CALL PrintProcedures(?)}")) {
+            stmt.setString(1, dbName);
             stmt.execute();
-            logger.info("Procedure {} dropped successfully.", procedure);
         }
+    }
+
+    public void dropProcedure(String procedure) throws SQLException {
+        String sql = String.format("DROP PROCEDURE IF EXISTS %s", procedure);
+        Statement statement = connection.createStatement();
+        statement.execute(sql);
+        logger.info("Procedure {} dropped successfully.", procedure);
     }
 }
