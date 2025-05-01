@@ -19,7 +19,7 @@ class StoreProcedureManagerTest {
     void setup(){
         String url = "jdbc:mysql://localhost:3306/socialNetworkTest";
         String username = "root";
-        String password = "";
+        String password = "1234";
         try {
             Connection connection = DriverManager.getConnection(url, username, password);
             storeProcedureManager = new StoreProcedureManager(connection);
@@ -48,11 +48,17 @@ class StoreProcedureManagerTest {
 
     @Test
     void createAndPrintProcedures() throws SQLException {
+        // procedures creation
         storeProcedureManager.createAddPostProcedure();
         storeProcedureManager.createAddUserProcedure();
+        storeProcedureManager.createPrintProceduresProcedure();
 
         // print to console available procedures
         storeProcedureManager.invokePrintProceduresProcedure();
 
+        // drop all procedures
+        storeProcedureManager.dropProcedure("AddPost");
+        storeProcedureManager.dropProcedure("PrintProcedures");
+        storeProcedureManager.dropProcedure("AddUser");
     }
 }

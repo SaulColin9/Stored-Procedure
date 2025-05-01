@@ -38,6 +38,20 @@ public class StoreProcedureManager {
         }
     }
 
+    public void createPrintProceduresProcedure() throws SQLException{
+        String sql = """
+                CREATE PROCEDURE PrintProcedures(IN dbName VARCHAR(255))
+                BEGIN
+                    SHOW PROCEDURE STATUS WHERE db = dbName;
+                END
+                """;
+        try(Statement statement = connection.createStatement()){
+            statement.execute(sql);
+            logger.info("Stored procedure PrintProcedures created successfully.");
+        }
+    }
+
+
     public void invokeAddUserProcedure(String name, String email) throws SQLException {
         try (CallableStatement stmt = connection.prepareCall("{CALL AddUser(?, ?)}")) {
             stmt.setString(1, name);
