@@ -44,7 +44,15 @@ public class StoreProcedureManager {
     public void invokePrintProceduresProcedure(String dbName) throws SQLException{
         try (CallableStatement stmt = connection.prepareCall("{CALL PrintProcedures(?)}")) {
             stmt.setString(1, dbName);
-            stmt.execute();
+            boolean notEmpty = stmt.execute();
+            if(notEmpty){
+                logger.info("List of procedures available:");
+                try(ResultSet resultSet = stmt.getResultSet()){
+                    while(resultSet.next())
+                        logger.info(resultSet.getString(2));
+                }
+            } else
+                logger.info("No procedures available in {}", dbName);
         }
     }
 
